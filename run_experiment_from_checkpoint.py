@@ -82,6 +82,8 @@ class SaveBestRunner(run_experiment.Runner):
     self._max_returns = []
     self._best_states = []
 
+    self._start_iteration = 199
+
   def _run_one_episode(self):
     """Executes a full trajectory of the agent interacting with the environment.
 
@@ -205,11 +207,6 @@ class LoadFromRunner(run_experiment.Runner):
     tf.logging.info('Loading best states from {}'.format(state_file_name))
     self.load_from_many = load_from_many
 
-    # with tf.gfile.Open(state_file_name, 'rb') as f:
-    #   data = np.load(f)
-    #   self.starting_returns = data['score']
-    #   self.starting_states = data['state']
-    # data = np.load(f)
     self.starting_returns = np.load(os.path.join(self.original_base_dir, 'best_scores.npy'))
     self.starting_states = np.load(os.path.join(self.original_base_dir, 'best_states.npy'))
     if self.load_from_many:

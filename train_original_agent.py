@@ -52,7 +52,6 @@ def main(unused_argv):
   run_experiment.load_gin_configs(FLAGS.gin_files, FLAGS.gin_bindings)
   runner = run_experiment_from_checkpoint.create_runner_checkpoint(
       FLAGS.base_dir, run_experiment.create_agent, schedule='save_best')
-  runner = dopamine.discrete_domains.run_experiment.create_runner(FLAGS.base_dir)
   runner.run_experiment()
 
 if __name__ == '__main__':

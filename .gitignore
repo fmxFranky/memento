@@ -11,6 +11,7 @@ submit.yaml
 *.pt
 *.ckpt
 .vscode/
+dockerfile
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
