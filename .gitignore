@@ -1,6 +1,5 @@
 original_agent/
 memento_agent/
-*data/
 outputs/
 logs/
 results/
@@ -12,6 +11,7 @@ submit.yaml
 *.ckpt
 .vscode/
 dockerfile
+wandb/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

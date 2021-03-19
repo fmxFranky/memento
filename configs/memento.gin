@@ -28,6 +28,7 @@ tf.train.AdamOptimizer.epsilon = 0.00015
 atari_lib.create_atari_environment.game_name = 'Berzerk'
 # Sticky actions with probability 0.25, as suggested by (Machado et al., 2017).
 atari_lib.create_atari_environment.sticky_actions = True
+atari_lib.maybe_transform_variable_names.legacy_checkpoint_load = True
 create_agent.agent_name = 'rainbow'
 Runner.num_iterations = 200
 Runner.training_steps = 250000  # agent steps

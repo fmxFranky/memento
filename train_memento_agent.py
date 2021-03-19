@@ -24,6 +24,7 @@ train_original_agent.py
 
 
 """
+import time
 
 from absl import app
 from absl import flags
@@ -31,7 +32,9 @@ from dopamine.discrete_domains import run_experiment
 
 import tensorflow as tf
 import run_experiment_from_checkpoint
+import wandb
 
+flags.DEFINE_string('game', None, 'Game')
 flags.DEFINE_string('base_dir', None,
                     'Base directory to host all required sub-directories.')
 flags.DEFINE_string('original_base_dir', None,
@@ -57,7 +60,9 @@ def main(unused_argv):
   del unused_argv
   gin_bindings = FLAGS.gin_bindings + \
       ['LoadFromRunner.original_base_dir="{}"'.format(FLAGS.original_base_dir)]
-
+  wandb.init(
+    project = "memento",
+    name=f'{FLAGS.game}-{time.strftime("%m%dT%H%M", time.gmtime())}')
   tf.logging.set_verbosity(tf.logging.INFO)
   run_experiment.load_gin_configs(FLAGS.gin_files, gin_bindings)
   runner = run_experiment_from_checkpoint.create_runner_checkpoint(
