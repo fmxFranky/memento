@@ -23,8 +23,6 @@ from absl import logging
 import gin
 import numpy as np
 import tensorflow as tf
-import wandb
-
 
 @gin.configurable
 def create_runner_checkpoint(base_dir,
@@ -307,19 +305,3 @@ class LoadFromRunner(run_experiment.Runner):
 
     self._end_episode(reward)
     return step_number, total_reward
-
-  def run_experiment(self):
-    """Runs a full experiment, spread over multiple iterations."""
-    logging.info('Beginning training...')
-    if self._num_iterations <= self._start_iteration:
-      logging.warning('num_iterations (%d) < start_iteration(%d)',
-                      self._num_iterations, self._start_iteration)
-      return
-
-    for iteration in range(self._start_iteration, self._num_iterations):
-      statistics = self._run_one_iteration(iteration)
-      self._log_experiment(iteration, statistics)
-      self._checkpoint_experiment(iteration)
-      for key, value in statistics.data_lists.items():
-        wandb.log({key: value[-1]}, step=iteration)
-    self._summary_writer.flush()
