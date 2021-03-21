@@ -1,6 +1,6 @@
 absl-py
 atari_py
-dopamine-rl
+dopamine-rl == 3.0.1
 gin-config >= 0.1
 numpy >= 1.14
 pillow

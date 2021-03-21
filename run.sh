@@ -16,21 +16,26 @@
 set -e
 set -x
 
+# bash run.sh Game num_eval_steps output_dir
+game=$1
+eval_steps=$2
+output_dir=$(cd $(dirname $3); pwd)/$game
+
 # download pretrained rainbow agent's model
-mkdir -p $3/memento/$1/original_agent/checkpoints/
-gsutil cp -r gs://download-dopamine-rl/lucid/rainbow/$1/1/* $3/memento/$1/original_agent/checkpoints/
+mkdir -p $output_dir/original_agent/checkpoints/
+gsutil cp -r gs://download-dopamine-rl/lucid/rainbow/$game/1/* $output_dir/original_agent/checkpoints/
 
 # train original agent only 1 iteration
 python train_original_agent.py \
   --gin_files=./configs/rainbow_199.gin \
-  --base_dir=$3/memento/$1/original_agent/ \
-  --gin_bindings "atari_lib.create_atari_environment.game_name='$1'" \
-  --gin_bindings "Runner.evaluation_steps=$2"
+  --base_dir=$output_dir/original_agent/ \
+  --gin_bindings "atari_lib.create_atari_environment.game_name='$game'" \
+  --gin_bindings "Runner.evaluation_steps=$eval_steps"
 
 # train memento agent
 python train_memento_agent.py \
   --gin_files=./configs/memento.gin \
-  --base_dir=$3/memento/$1/memento_agent \
-  --original_base_dir=$3/memento/$1/original_agent/ \
-  --gin_bindings "atari_lib.create_atari_environment.game_name='$1'" \
+  --base_dir=$output_dir/memento_agent \
+  --original_base_dir=$output_dir/original_agent/ \
+  --gin_bindings "atari_lib.create_atari_environment.game_name='$game'" \
   --gin_bindings atari_lib.maybe_transform_variable_names.legacy_checkpoint_load=True
